@@ -63,3 +63,6 @@ class NotificationManager {
         services.removeAll { $0 === service }
     }
 }
+
+// MARK: - пометка преподавателя
+// 10 из 10

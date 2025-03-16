@@ -1,7 +1,7 @@
 import Cocoa
 
 // клиент
-// MARK: - Кажется тут можно сделать наследование? 
+// MARK: - Кажется тут можно сделать наследование?
 class Client {
     let name: String
     let address: String
