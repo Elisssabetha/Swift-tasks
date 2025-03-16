@@ -1,6 +1,7 @@
 import Cocoa
 
 // клиент
+// MARK: - Кажется тут можно сделать наследование? 
 class Client {
     let name: String
     let address: String
@@ -12,6 +13,8 @@ class Client {
     
     // формирование заказа
     func makeOrder(dishes: [Dish], restaurant: Restaurant) -> Order? {
+        // MARK: - Пометка преподавателя
+        // Использование guard было бы более подходящим
         if dishes.isEmpty {
             print("Невозможно создать заказ без блюд")
             return nil
@@ -98,6 +101,7 @@ struct Dish {
 }
 
 //курьер
+// MARK: - Кажется тут можно сделать наследование?
 class Courier {
     let name: String
     var isAvailable: Bool = true //свободен ли сейчас
@@ -122,6 +126,11 @@ class Courier {
 }
 
 // заказ
+// MARK: - (Улучшение генерации ID) - Сейчас ID заказа создается через счетчик. Как можно сделать лучше?
+// /*
+// Можно использовать `UUID()` вместо `Int idCounter`, чтобы избежать возможных конфликтов при работе с базой данных.
+//
+// */
 class Order {
     let id: Int
     let client: Client
@@ -172,6 +181,7 @@ enum OrderStatus: String {
     case delivered = "Доставлен"
 }
 
+// MARK: - (Улучшение логики доставки) - Сейчас доставка занимает фиксированное время. Как сделать его динамическим?
 class DeliveryManager {
     var availableCouriers: [Courier] = [] //список курьеров сервиса доставки
     var pendingOrders: [Order] = [] // заказы ожидающие курьера
