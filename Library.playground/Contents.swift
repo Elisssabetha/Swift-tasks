@@ -32,6 +32,11 @@ import Cocoa
 //- Гарри Поттер
 //- Властелин Колец
 
+// MARK: - Пометка преподавателя
+/*
+Отличная работа! Вы грамотно использовали принципы ООП, создали классы с нужными свойствами и методами, а также реализовали сценарий работы библиотеки. Код структурирован и хорошо читаем. Теперь разберем, что можно улучшить.
+*/
+
 class Book {
     var title: String
     var author: String
@@ -61,48 +66,65 @@ class User {
         if book.isAvailable {
             borrowedBooks.append(book)
             book.isAvailable = false
-            print("Пользователь \(name) берёт книгу \(book.title)")
+            print("Пользователь \(name) берёт книгу «\(book.title)»")
         } else {
-            print("Книга уже взята другим читателем")
+            print("Книга уже взята другим пользователем.")
         }
     }
     
     func returnBook(book: Book) {
-        if !borrowedBooks.contains(where: { $0 === book }) {
-            print("Книги \(book.title) у читателя \(name) нет")
-        } else {
-            
+        if let index = borrowedBooks.firstIndex(where: { $0.title == book.title }) {
+            borrowedBooks.remove(at: index)
             book.isAvailable = true
-            borrowedBooks.removeAll { $0 === book }
-            print("Пользователь \(name) возвращает книгу \(book.title)")
+            print("Пользователь \(name) возвращает книгу «\(book.title)»")
+        } else {
+            print("У пользователя \(name) нет этой книги.")
         }
     }
     
-    func checkBorrowedBooks() -> () {
-        borrowedBooks.isEmpty ? print("У читателя \(name) нет книг") : borrowedBooks.forEach {book in print("Книги у \(name): \(book.getDescription())")}
+    func checkBorrowedBooks() {
+        if borrowedBooks.isEmpty {
+            print("Пользователь \(name) не взял ни одной книги.")
+        } else {
+            print("Пользователь \(name) взял книги:")
+            for book in borrowedBooks {
+                print("- \(book.title)")
+            }
+        }
     }
 }
 
+// MARK: - Пометка преподавателя
+// MARK: - (Добавьте хранение списка книг в библиотеке)
+//
+/*
+Вместо того чтобы передавать массив книг в метод, можно хранить книги внутри класса Librarian. Это упростит работу с библиотекой.
+*/
+
 class Librarian {
-    func findBook (byTitle title: String, in books: [Book]) -> Book? {
-        for book in books {
-            if book.title == title {
-                return book
-            }
-        }
-        return nil
+    func findBook(byTitle title: String, in books: [Book]) -> Book? {
+        return books.first { $0.title == title && $0.isAvailable }
     }
     
-    func listAvailableBooks(books: [Book]) -> () {
-        var availableBooks: String = "Доступные книги:\n"
-        for book in books {
-            if book.isAvailable {
-                availableBooks += "- \(book.title)\n"
+    func listAvailableBooks(books: [Book]) {
+        let availableBooks = books.filter { $0.isAvailable }
+        if availableBooks.isEmpty {
+            print("Нет доступных книг.")
+        } else {
+            print("Доступные книги:")
+            for book in availableBooks {
+                print("- \(book.title)")
             }
         }
-        print(availableBooks)
     }
 }
+
+// MARK: - Пометка преподавателя
+// MARK: - (Создайте библиотеку как отдельный объект)
+//
+/*
+Можно вынести книги в отдельный класс Library, где будут методы добавления, удаления книг и управления доступностью.
+*/
 
 var books: [Book] = []
 books.append(Book(title: "Гарри Поттер", author: "Дж. Роулинг", year: 1997))
@@ -118,48 +140,58 @@ let bookName = "Властелин колец"
 let bookName2 = "Гарри Поттер"
 let bookName3 = "Harry Potter"
 
-// выводим все доступные книги
+// Выводим список доступных книг
 librarian.listAvailableBooks(books: books)
 
-// пользователь берет книгу Властелин колец, а для этого библиотекарь ее находит
+// Пользователь берет книгу "Властелин колец"
 if let book = librarian.findBook(byTitle: bookName, in: books) {
     user1.borrowBook(book: book)
 } else {
-    print("Такой книги, к сожалению, нет")
+    print("Такой книги, к сожалению, нет.")
 }
-// проверяем список доступных книг после того как пользователь взял одну из книг
+
+// Проверяем список доступных книг после того, как пользователь взял одну из книг
 librarian.listAvailableBooks(books: books)
-//проверка что у пользователя есть книга
+
+// Проверка, что у пользователя есть книга
 user1.checkBorrowedBooks()
 
-// проверка если другой читатель захочет взять книгу, уже взятую другим читателем
+// Проверка, если другой читатель хочет взять уже взятую книгу
 if let book = librarian.findBook(byTitle: bookName, in: books) {
     user2.borrowBook(book: book)
 } else {
-    print("Такой книги, к сожалению, нет")
+    print("Такой книги, к сожалению, нет.")
 }
-// проверка, что пользователь не получилось взять недоступную книгу
+
+// Проверка, что пользователь не смог взять недоступную книгу
 user2.checkBorrowedBooks()
 
-
-if let book = librarian.findBook(byTitle: bookName3, in: books) {
-    user2.borrowBook(book: book)
-} else {
-    print("Такой книги, к сожалению, нет")
-}
-
-// проверка на попытку вернуть книгу, которой у читателя нет
+// Проверка на попытку вернуть книгу, которой у читателя нет
 if let book = librarian.findBook(byTitle: bookName, in: books) {
     user2.returnBook(book: book)
 } else {
-    print("Такой книги, к сожалению, нет")
+    print("Такой книги, к сожалению, нет.")
 }
 
+// Возвращение книги пользователем
 if let book = librarian.findBook(byTitle: bookName, in: books) {
     user1.returnBook(book: book)
 } else {
-    print("Такой книги, к сожалению, нет")
+    print("Такой книги, к сожалению, нет.")
 }
 
+// Проверяем список книг у пользователя после возврата
 user1.checkBorrowedBooks()
+
+// Выводим обновленный список доступных книг
 librarian.listAvailableBooks(books: books)
+
+/*
+Рекомендации:
+- Подумайте о создании отдельного класса `Library` для хранения книг и управления ими.
+- Можно хранить список книг внутри `Librarian`, чтобы не передавать его в методы.
+- В методах `findBook` сейчас книги ищутся только среди доступных, но можно добавить возможность поиска всех книг.
+- Отлично реализована проверка на доступность книги, но можно добавить механизм бронирования книг.
+
+Оценка: 9/10. Хорошая структура, но есть куда развивать функциональность. Продолжайте в том же духе!
+*/
