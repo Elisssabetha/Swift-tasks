@@ -45,6 +45,7 @@ class ForgotPasswordVC: UIViewController {
         views.forEach { view.addSubview($0) }
         
         setupConstraints()
+    
         
 //        forgotPasswordForm.delegate = self
         
@@ -52,7 +53,8 @@ class ForgotPasswordVC: UIViewController {
     
     func setupConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(65) // по макету 121
+            $0.top.lessThanOrEqualTo(view.safeAreaLayoutGuide).offset(65) //макет 121
+            $0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
             $0.centerX.equalTo(view.safeAreaLayoutGuide)
         }
         
@@ -62,9 +64,11 @@ class ForgotPasswordVC: UIViewController {
         }
         
         forgotPasswordForm.snp.makeConstraints {
-            $0.top.equalTo(subtitleLabel.snp.bottom).offset(50)
+            $0.top.lessThanOrEqualTo(subtitleLabel.snp.bottom).offset(50)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             $0.bottom.equalToSuperview()
+            $0.height.lessThanOrEqualTo(620)
+            $0.height.greaterThanOrEqualTo(534)
         }
     }
 

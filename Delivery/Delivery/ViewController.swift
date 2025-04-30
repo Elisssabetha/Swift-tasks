@@ -91,15 +91,15 @@ class ViewController: UIViewController {
         case 0, 1:
             titleLabel.text = "All your favorites"
             button.setTitle("NEXT", for: .normal)
-            print(pager.currentPage)
+            skipBtn.isHidden = false
         case 2:
             titleLabel.text = "Order from choosen chef"
             button.setTitle("NEXT", for: .normal)
-            print(pager.currentPage)
+            skipBtn.isHidden = false
         case 3:
             titleLabel.text = "Free delivery offers"
             button.setTitle("GET STARTED", for: .normal)
-            print(pager.currentPage)
+            skipBtn.isHidden = true
         default:
             break
         }
@@ -130,7 +130,7 @@ class ViewController: UIViewController {
         }
         titleLabel.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(img.snp.bottom).offset(63) //63
-            $0.top.greaterThanOrEqualTo(img.snp.bottom).offset(8)
+            $0.top.greaterThanOrEqualTo(img.snp.bottom).offset(24)
             $0.centerX.equalTo(view.safeAreaLayoutGuide)
         }
         
@@ -141,7 +141,7 @@ class ViewController: UIViewController {
         
         pager.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(textLabel.snp.bottom).offset(32)
-            $0.top.greaterThanOrEqualTo(textLabel.snp.bottom).offset(8)
+            $0.top.greaterThanOrEqualTo(textLabel.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
         }
         

@@ -183,28 +183,35 @@ class LoginForm: UIView {
             $0.top.leading.trailing.equalToSuperview().inset(24)
         }
         btnStack.snp.makeConstraints {
-            $0.top.equalTo(stackFields.snp.bottom).offset(26)
+            $0.top.lessThanOrEqualTo(stackFields.snp.bottom).offset(26)
+            $0.top.greaterThanOrEqualTo(stackFields.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview().inset(24)
         }
         loginBtn.snp.makeConstraints {
             $0.height.equalTo(62)
-            $0.top.equalTo(btnStack.snp.bottom).offset(29)
+            $0.top.lessThanOrEqualTo(btnStack.snp.bottom).offset(29)
+            $0.top.greaterThanOrEqualTo(btnStack.snp.bottom).offset(15)
             $0.leading.trailing.equalToSuperview().inset(24)
         }
         
         signUpStack.snp.makeConstraints {
-            $0.top.equalTo(loginBtn.snp.bottom).offset(38)
+            $0.top.lessThanOrEqualTo(loginBtn.snp.bottom).offset(38)
+            $0.top.greaterThanOrEqualTo(loginBtn.snp.bottom).offset(20)
             $0.leading.trailing.equalToSuperview().inset(63)
         }
         
         orLbl.snp.makeConstraints {
-            $0.top.equalTo(signUpStack.snp.bottom).offset(17)
+            $0.top.lessThanOrEqualTo(signUpStack.snp.bottom).offset(17)
+            $0.top.greaterThanOrEqualTo(signUpStack.snp.bottom).offset(12)
             $0.centerX.equalToSuperview()
         }
         
         networkStack.snp.makeConstraints {
-            $0.top.equalTo(orLbl.snp.bottom).offset(25)
-            $0.leading.trailing.equalToSuperview().inset(64)
+            $0.top.lessThanOrEqualTo(orLbl.snp.bottom).offset(25)
+            $0.top.greaterThanOrEqualTo(orLbl.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.bottom.lessThanOrEqualToSuperview().inset(39)
+//            $0.bottom.greaterThanOrEqualToSuperview().inset(-39)
         }
         
     }

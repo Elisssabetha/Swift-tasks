@@ -84,23 +84,23 @@ extension SignUpVC: SignUpFormDelegate {
 
 }
 
-
-struct ViewControllerWrapper: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> SignUpVC {
-        return SignUpVC()
-    }
-    
-    func updateUIViewController(_ uiViewController: SignUpVC, context: Context) {
-        // ничего не обновляем
-    }
-}
-struct ContentView: View {
-    var body: some View {
-        ViewControllerWrapper()
-            .edgesIgnoringSafeArea(.all) // если нужно на весь экран
-    }
-}
-
-#Preview {
-    ContentView()
-}
+//
+//struct ViewControllerWrapper: UIViewControllerRepresentable {
+//    func makeUIViewController(context: Context) -> SignUpVC {
+//        return SignUpVC()
+//    }
+//    
+//    func updateUIViewController(_ uiViewController: SignUpVC, context: Context) {
+//        // ничего не обновляем
+//    }
+//}
+//struct ContentView: View {
+//    var body: some View {
+//        ViewControllerWrapper()
+//            .edgesIgnoringSafeArea(.all) // если нужно на весь экран
+//    }
+//}
+//
+//#Preview {
+//    ContentView()
+//}
