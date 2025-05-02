@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SignUpForm: UIView {
+class SignUpFormView: UIView {
     
     weak var delegate: SignUpFormDelegate?
     
@@ -27,9 +27,17 @@ class SignUpForm: UIView {
         
         return btn
     }()
+    private lazy var passwordBtn2: UIButton = {
+        let btn = UIButton()
+        btn.setImage(UIImage(named: "eyeOff"), for: .normal)
+        btn.addTarget(self, action: #selector(showPassword), for: .touchDown)
+        btn.addTarget(self, action: #selector(hidePassword), for: .touchUpInside)
+        
+        return btn
+    }()
     
-    private var name: InputField = {
-        let name = InputField()
+    private var name: InputView = {
+        let name = InputView()
         
         name.fieldName.text = "NAME"
         
@@ -38,8 +46,8 @@ class SignUpForm: UIView {
         return name
     }()
     
-    private var email: InputField = {
-        let email = InputField()
+    private var email: InputView = {
+        let email = InputView()
         
         email.fieldName.text = "EMAIL"
         
@@ -49,8 +57,8 @@ class SignUpForm: UIView {
         return email
     }()
     
-    private lazy var password: InputField = {
-        let password = InputField()
+    private lazy var password: InputView = {
+        let password = InputView()
         
         password.fieldName.text = "PASSWORD"
         
@@ -60,14 +68,14 @@ class SignUpForm: UIView {
         return password
     }()
     
-    private lazy var reTypePassword: InputField = {
-        let password = InputField()
+    private lazy var reTypePassword: InputView = {
+        let password = InputView()
         
         password.fieldName.text = "RE-TYPE PASSWORD"
         
         password.field.isSecureTextEntry = true
         password.field.attributedPlaceholder = NSAttributedString(string: "**********", attributes: [.foregroundColor: UIColor(red: 160/255, green: 165/255, blue: 186/255, alpha: 1)])
-        password.field.rightView = passwordBtn
+        password.field.rightView = passwordBtn2
         return password
     }()
     
@@ -82,16 +90,14 @@ class SignUpForm: UIView {
     init () {
         super.init(frame: .zero)
         
-        let views = [stackFields, signBtn, ]
-        views.forEach { addSubview($0) }
+        [stackFields, signBtn].forEach { addSubview($0) }
         
         layer.cornerRadius = 24
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         backgroundColor = .white
         
-        stackFields.addArrangedSubview(name)
-        stackFields.addArrangedSubview(email)
-        stackFields.addArrangedSubview(password)
-        stackFields.addArrangedSubview(reTypePassword)
+        [name, email, password, reTypePassword].forEach { stackFields.addArrangedSubview($0) }
+        
         
         setupConstraints()
         
@@ -101,19 +107,20 @@ class SignUpForm: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         stackFields.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(24)
         }
+        
         signBtn.snp.makeConstraints {
             $0.height.equalTo(62)
-            $0.top.equalTo(stackFields.snp.bottom).offset(47)
+            $0.top.lessThanOrEqualTo(stackFields.snp.bottom).offset(47)
             $0.leading.trailing.equalToSuperview().inset(24)
         }
         
     }
     
-    @objc func showPassword() {
+    @objc private func showPassword() {
         password.field.isSecureTextEntry = false
         passwordBtn.setImage(UIImage(named: "hidePassword"), for: .normal)
     }
@@ -123,7 +130,7 @@ class SignUpForm: UIView {
         passwordBtn.setImage(UIImage(named: "eyeOff"), for: .normal)
     }
     
-    func validate() -> Bool {
+    private func validate() -> Bool {
         let isNameValid: Bool = {
             guard let nameText = name.field.text,
                   !nameText.isEmpty else {
@@ -177,8 +184,8 @@ class SignUpForm: UIView {
     }
     
     @objc private func signUp() {
-        let valResult = validate()
-        if valResult {
+        
+        if validate() {
             delegate?.singUpTapped(self)
         }
     }

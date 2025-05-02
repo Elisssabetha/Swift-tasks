@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class InputField: UIView {
+class InputView: UIView {
     
     let fieldName: UILabel = {
         let label = UILabel()
@@ -31,8 +31,7 @@ class InputField: UIView {
     init () {
         super.init(frame: .zero)
         
-        let views = [fieldName, field]
-        views.forEach {
+        [fieldName, field].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -45,10 +44,11 @@ class InputField: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         fieldName.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
         }
+        
         field.snp.makeConstraints {
             $0.top.equalTo(fieldName.snp.bottom).offset(8)
             $0.leading.trailing.bottom.equalToSuperview()

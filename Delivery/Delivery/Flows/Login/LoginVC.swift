@@ -9,6 +9,12 @@ import UIKit
 import SwiftUI
 import SnapKit
 
+protocol LoginFormDelegate: AnyObject {
+    func loginTapped(_ form: LoginFormView)
+    func forgotPasswordTapped(_ form: LoginFormView)
+    func signupTapped(_ form: LoginFormView)
+}
+
 class LoginVC: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -30,8 +36,8 @@ class LoginVC: UIViewController {
         return label
     }()
     
-    private let loginForm: LoginForm = {
-        let view = LoginForm()
+    private let loginForm: LoginFormView = {
+        let view = LoginFormView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -42,8 +48,7 @@ class LoginVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         
-        let views = [titleLabel, subtitleLabel, loginForm]
-        views.forEach { view.addSubview($0) }
+        [titleLabel, subtitleLabel, loginForm].forEach { view.addSubview($0) }
         
         setupConstraints()
         
@@ -51,19 +56,19 @@ class LoginVC: UIViewController {
         navigationItem.hidesBackButton = true
         
         //меняет кнопку назад на следующем экране
-        navigationController?.navigationBar.backIndicatorImage = UIImage()
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage()
-        navigationItem.backBarButtonItem = UIBarButtonItem(
-                title: "",
-                image: UIImage(named: "backBtn")?.withAlignmentRectInsets(UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)),
-                primaryAction: nil,
-                menu: nil
-            )
+//        navigationController?.navigationBar.backIndicatorImage = UIImage()
+//        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage()
+//        navigationItem.backBarButtonItem = UIBarButtonItem(
+//                title: "",
+//                image: UIImage(named: "backBtn")?.withAlignmentRectInsets(UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)),
+//                primaryAction: nil,
+//                menu: nil
+//            )
 
-        
+    
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         titleLabel.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(view.safeAreaLayoutGuide).offset(65) //макет 121
             $0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
@@ -87,22 +92,17 @@ class LoginVC: UIViewController {
 
 }
 
-protocol LoginFormDelegate: AnyObject {
-    func loginTapped(_ form: LoginForm)
-    func forgotPasswordTapped(_ form: LoginForm)
-    func signupTapped(_ form: LoginForm)
-}
 
 extension LoginVC: LoginFormDelegate {
-    func loginTapped(_ form: LoginForm) {
+    func loginTapped(_ form: LoginFormView) {
         navigationController?.pushViewController(FirstPageVC(), animated: true)
     }
     
-    func forgotPasswordTapped(_ form: LoginForm) {
+    func forgotPasswordTapped(_ form: LoginFormView) {
         navigationController?.pushViewController(ForgotPasswordVC(), animated: true)
     }
     
-    func signupTapped(_ form: LoginForm) {
+    func signupTapped(_ form: LoginFormView) {
         navigationController?.pushViewController(SignUpVC(), animated: true)
     }
 }

@@ -26,8 +26,7 @@ class RememberMeBtn: UIButton {
     init () {
         super.init(frame: .zero)
         
-        let views = [img, text]
-        views.forEach {
+        [img, text].forEach {
             addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -41,12 +40,15 @@ class RememberMeBtn: UIButton {
     
     func setupConstraints() {
         img.snp.makeConstraints {
-            $0.leading.top.equalToSuperview()
+            $0.leading.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        
         }
+        
         text.snp.makeConstraints {
             $0.leading.equalTo(img.snp.trailing).offset(10)
             $0.trailing.equalToSuperview()
-            $0.top.equalToSuperview().offset(2)
+            $0.centerY.equalToSuperview()
         }
     }
 

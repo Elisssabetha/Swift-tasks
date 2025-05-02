@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol ForgotPasswordFormDelegate: AnyObject {
+    func sendCodeTapped(_ form: ForgotPasswordFormView)
+}
+
+
 class ForgotPasswordVC: UIViewController {
 
     private let titleLabel: UILabel = {
@@ -29,8 +34,8 @@ class ForgotPasswordVC: UIViewController {
         return label
     }()
     
-    private let forgotPasswordForm: ForgotPasswordForm = {
-        let view = ForgotPasswordForm()
+    private let forgotPasswordForm: ForgotPasswordFormView = {
+        let view = ForgotPasswordFormView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -41,17 +46,16 @@ class ForgotPasswordVC: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         
-        let views = [titleLabel, subtitleLabel, forgotPasswordForm]
-        views.forEach { view.addSubview($0) }
+        
+        [titleLabel, subtitleLabel, forgotPasswordForm].forEach { view.addSubview($0) }
         
         setupConstraints()
-    
         
-//        forgotPasswordForm.delegate = self
+        forgotPasswordForm.delegate = self
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         titleLabel.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(view.safeAreaLayoutGuide).offset(65) //макет 121
             $0.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide)
@@ -72,4 +76,12 @@ class ForgotPasswordVC: UIViewController {
         }
     }
 
+}
+
+
+extension ForgotPasswordVC: ForgotPasswordFormDelegate {
+    func sendCodeTapped(_ form: ForgotPasswordFormView) {
+        navigationController?.pushViewController(VerificationVC(), animated: true)
+    }
+    
 }

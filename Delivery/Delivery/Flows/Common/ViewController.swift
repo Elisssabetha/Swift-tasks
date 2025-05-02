@@ -79,8 +79,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        let views = [pager, img, titleLabel, textLabel, pager, button, skipBtn]
-        views.forEach { view.addSubview($0) }
+         
+        [pager, img, titleLabel, textLabel, pager, button, skipBtn].forEach { view.addSubview($0) }
         
         setupConstraints()
         
@@ -128,6 +128,7 @@ class ViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(68)
             $0.height.equalTo(292)
         }
+        
         titleLabel.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(img.snp.bottom).offset(63) //63
             $0.top.greaterThanOrEqualTo(img.snp.bottom).offset(24)

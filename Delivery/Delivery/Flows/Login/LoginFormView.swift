@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class LoginForm: UIView {
+class LoginFormView: UIView {
     
     weak var delegate: LoginFormDelegate?
     
@@ -29,8 +29,8 @@ class LoginForm: UIView {
         return btn
     }()
     
-    private var email: InputField = {
-        let email = InputField()
+    private var email: InputView = {
+        let email = InputView()
         
         email.fieldName.text = "EMAIL"
         
@@ -40,8 +40,8 @@ class LoginForm: UIView {
         return email
     }()
     
-    private lazy var password: InputField = {
-        let password = InputField()
+    private lazy var password: InputView = {
+        let password = InputView()
         
         password.fieldName.text = "PASSWORD"
         
@@ -150,25 +150,18 @@ class LoginForm: UIView {
     
     init () {
         super.init(frame: .zero)
-        
-        let views = [stackFields, btnStack, loginBtn, signUpStack, orLbl, networkStack]
-        views.forEach { addSubview($0) }
+    
+        [stackFields, btnStack, loginBtn, signUpStack, orLbl, networkStack].forEach { addSubview($0) }
         
         layer.cornerRadius = 24
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         backgroundColor = .white
         
-        stackFields.addArrangedSubview(email)
-        stackFields.addArrangedSubview(password)
+        [email, password].forEach { stackFields.addArrangedSubview($0) }
+        [rememberBtn, forgotPasswordBtn].forEach { btnStack.addArrangedSubview($0) }
+        [signUpLbl, signUpBtn].forEach { signUpStack.addArrangedSubview($0) }
+        [fbButton, twiButton, appleButton].forEach { networkStack.addArrangedSubview($0) }
         
-        btnStack.addArrangedSubview(rememberBtn)
-        btnStack.addArrangedSubview(forgotPasswordBtn)
-        
-        signUpStack.addArrangedSubview(signUpLbl)
-        signUpStack.addArrangedSubview(signUpBtn)
-        
-        networkStack.addArrangedSubview(fbButton)
-        networkStack.addArrangedSubview(twiButton)
-        networkStack.addArrangedSubview(appleButton)
         
         setupConstraints()
         
@@ -178,15 +171,17 @@ class LoginForm: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         stackFields.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(24)
         }
+        
         btnStack.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(stackFields.snp.bottom).offset(26)
             $0.top.greaterThanOrEqualTo(stackFields.snp.bottom).offset(18)
             $0.leading.trailing.equalToSuperview().inset(24)
         }
+        
         loginBtn.snp.makeConstraints {
             $0.height.equalTo(62)
             $0.top.lessThanOrEqualTo(btnStack.snp.bottom).offset(29)
@@ -211,12 +206,11 @@ class LoginForm: UIView {
             $0.top.greaterThanOrEqualTo(orLbl.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
             $0.bottom.lessThanOrEqualToSuperview().inset(39)
-//            $0.bottom.greaterThanOrEqualToSuperview().inset(-39)
         }
         
     }
     
-    @objc func showPassword() {
+    @objc private func showPassword() {
         password.field.isSecureTextEntry = false
     }
     
@@ -224,7 +218,7 @@ class LoginForm: UIView {
         password.field.isSecureTextEntry = true
     }
     
-    func validate() -> Bool {
+    private func validate() -> Bool {
         let isEmailValid: Bool = {
                 guard let emailText = email.field.text,
                       !emailText.isEmpty,
@@ -254,8 +248,7 @@ class LoginForm: UIView {
     }
     
     @objc private func login() {
-        let valResult = validate()
-        if valResult {
+        if validate() {
             delegate?.loginTapped(self)
         }
     }

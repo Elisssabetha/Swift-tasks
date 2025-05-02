@@ -8,10 +8,12 @@
 import UIKit
 import SnapKit
 
-class ForgotPasswordForm: UIView {
+class ForgotPasswordFormView: UIView {
     
-    private var email: InputField = {
-        let email = InputField()
+    weak var delegate: ForgotPasswordFormDelegate?
+    
+    private var email: InputView = {
+        let email = InputView()
         
         email.fieldName.text = "EMAIL"
         
@@ -31,10 +33,10 @@ class ForgotPasswordForm: UIView {
     init () {
         super.init(frame: .zero)
         
-        let views = [email, sendCodeBtn]
-        views.forEach { addSubview($0) }
+        [email, sendCodeBtn].forEach { addSubview($0) }
         
         layer.cornerRadius = 24
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         backgroundColor = .white
         
         setupConstraints()
@@ -45,7 +47,7 @@ class ForgotPasswordForm: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         email.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(24)
         }
@@ -57,27 +59,27 @@ class ForgotPasswordForm: UIView {
         }
     }
     
-    func validate() {
-        
+    private func validate() -> Bool {
         guard let emailText = email.field.text,
               !emailText.isEmpty,
               email.isEmailValid(emailText) else {
             email.field.layer.borderWidth = 1
             email.field.layer.borderColor = UIColor.red.cgColor
-            return
+            return false
         }
         
         email.field.layer.borderWidth = 0
         email.field.layer.borderColor = UIColor.clear.cgColor
+        return true
     }
     
     
     
     
-    @objc func sendCode() {
-        print("send code")
-        validate()
-        
+    @objc private func sendCode() {
+        if validate() {
+            delegate?.sendCodeTapped(self)
+        }
     }
     
 }
